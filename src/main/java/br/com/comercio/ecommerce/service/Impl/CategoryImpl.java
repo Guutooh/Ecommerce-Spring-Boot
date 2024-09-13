@@ -1,5 +1,6 @@
 package br.com.comercio.ecommerce.service.Impl;
 
+import br.com.comercio.ecommerce.exceptions.ResourceNotFoundException;
 import br.com.comercio.ecommerce.model.Category;
 import br.com.comercio.ecommerce.repository.CategoryRepository;
 import br.com.comercio.ecommerce.service.CategoryService;
@@ -33,7 +34,7 @@ public class CategoryImpl implements CategoryService {
     @Override
     public String deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category","categoryId",categoryId));
 
         categoryRepository.delete(category);
         return "Category with categoryId: " + categoryId + " deleted successfully !!";
@@ -41,8 +42,9 @@ public class CategoryImpl implements CategoryService {
 
     @Override
     public Category updateCategory(Category category, Long categoryId) {
+
         Category savedCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource Not Found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Category","categoryId",categoryId));
 
         category.setCategoryId(categoryId);
         savedCategory = categoryRepository.save(category);
