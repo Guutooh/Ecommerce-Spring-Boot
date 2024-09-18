@@ -1,5 +1,6 @@
 package br.com.comercio.ecommerce.service.Impl;
 
+import br.com.comercio.ecommerce.exceptions.APIException;
 import br.com.comercio.ecommerce.exceptions.ResourceNotFoundException;
 import br.com.comercio.ecommerce.model.Category;
 import br.com.comercio.ecommerce.repository.CategoryRepository;
@@ -25,8 +26,10 @@ public class CategoryImpl implements CategoryService {
         return categoryRepository.findAll();
     }
 
-    @Override
     public void createCategory(Category category) {
+        Category savedCategory = categoryRepository.findByCategoryName(category.getCategoryName());
+        if (savedCategory != null)
+            throw new APIException("Category with the name " + category.getCategoryName() + " already exists !!!");
         category.setCategoryId(nextId++);
         categoryRepository.save(category);
     }
@@ -34,7 +37,7 @@ public class CategoryImpl implements CategoryService {
     @Override
     public String deleteCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category","categoryId",categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
 
         categoryRepository.delete(category);
         return "Category with categoryId: " + categoryId + " deleted successfully !!";
@@ -44,7 +47,7 @@ public class CategoryImpl implements CategoryService {
     public Category updateCategory(Category category, Long categoryId) {
 
         Category savedCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category","categoryId",categoryId));
+                .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
 
         category.setCategoryId(categoryId);
         savedCategory = categoryRepository.save(category);
