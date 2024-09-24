@@ -1,17 +1,16 @@
 package br.com.comercio.ecommerce.service;
 
 
-import br.com.comercio.ecommerce.model.Category;
-
-import java.util.List;
+import br.com.comercio.ecommerce.payload.CategoryDTO;
+import br.com.comercio.ecommerce.payload.CategoryResponse;
 
 public interface CategoryService {
 
-    List<Category> getAllCategories();
+    CategoryResponse getAllCategories();
 
-    void createCategory(Category category);
+    CategoryDTO createCategory(CategoryDTO category);
 
-    String deleteCategory(Long categoryId);
+    CategoryDTO deleteCategory(Long categoryId);
 
-    Category updateCategory(Category category, Long categoryId);
+    CategoryDTO updateCategory(CategoryDTO categoryDTO, Long categoryId);
 }
